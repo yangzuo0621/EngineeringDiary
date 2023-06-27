@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix projectgo
+gazelle(name = "gazelle")
+
+go_library(
+    name = "projectgo_lib",
+    srcs = ["main.go"],
+    importpath = "projectgo",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "projectgo",
+    embed = [":projectgo_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "projectgo_test",
+    srcs = ["main_test.go"],
+    embed = [":projectgo_lib"],
+)
