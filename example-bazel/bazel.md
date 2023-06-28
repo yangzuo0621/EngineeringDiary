@@ -132,22 +132,16 @@ go_test(
 [jdk.WORKSPACE.tmpl](https://github.com/bazelbuild/bazel/blob/6.2.1/src/main/java/com/google/devtools/build/lib/bazel/rules/java/jdk.WORKSPACE.tmpl)
 
 ```
-load("@bazel_tools//tools/jdk:remote_java_repository.bzl", "remote_java_repository")
-
-remote_java_repository(
-    name = "remotejdk20_linux",
-    target_compatible_with = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
-    sha256 = "0386418db7f23ae677d05045d30224094fc13423593ce9cd087d455069893bac",
-    strip_prefix = "zulu20.28.85-ca-jdk20.0.0-linux_x64",
+http_archive(
+    name = "rules_java",
     urls = [
-        "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu20.28.85-ca-jdk20.0.0-linux_x64.tar.gz",
-        "https://cdn.azul.com/zulu/bin/zulu20.28.85-ca-jdk20.0.0-linux_x64.tar.gz",
+        "https://github.com/bazelbuild/rules_java/releases/download/6.1.1/rules_java-6.1.1.tar.gz",
     ],
-    version = "20",
+    sha256 = "76402a50ae6859d50bd7aed8c1b8ef09dae5c1035bb3ca7d276f7f3ce659818a",
 )
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+rules_java_dependencies()
+rules_java_toolchains()
 ```
 
 NOTE: for some bazel version, the `target_compatible_with` is not available in `remote_java_repository`, use `exec_compatible_with` instead.
